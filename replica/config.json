@@ -1,0 +1,15 @@
+{
+  "replica": {
+    "group_id": "group_1",
+    "main_server_url": "https://main.datarivers.io",
+    "port": 8002,
+    "sync_interval": 10,
+    "replica_id": "replica1"
+  },
+  "admin": {
+    "key": "zmMfyjpIt3ImDCxUqtPN1EOcMSzUF6hoGcqaUhkXOcE"
+  },
+  "database": {
+    "name": "replica1_sessions.db"
+  }
+}
