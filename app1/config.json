@@ -1,0 +1,15 @@
+{
+  "alohomora": {
+    "main_server_url": "https://main.datarivers.io",
+    "replica_url": "https://replica1.datarivers.io",
+    "timeout": 10
+  },
+  "app": {
+    "host": "0.0.0.0",
+    "port": 8001,
+    "debug": true
+  },
+  "database": {
+    "name": "app1db.db"
+  }
+}
