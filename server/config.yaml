@@ -1,0 +1,13 @@
+server:
+  host: 127.0.0.1
+  port: 8000
+  debug: false
+
+admin:
+  key: zmMfyjpIt3ImDCxUqtPN1EOcMSzUF6hoGcqaUhkXOcE
+
+database:
+  path: sessions.db
+
+logging:
+  enabled: false
