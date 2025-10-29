@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Minimal production simulator for Alohomora EC2 deployment.
-Tests one complete workflow lifecycle on real infrastructure.
 """
 
 import json
@@ -972,105 +971,6 @@ def load_test(pattern, max_users, duration_sec=60, warmup_s=60):
         workflow_data.get('workflow_id'),
         [workflow_data.get('func1_id'), workflow_data.get('func2_id')]
     )
-
-
-# def load_test(pattern, max_users, duration_sec=60):
-#     """Run load test with n concurrent users following a traffic pattern"""
-#     from concurrent.futures import ThreadPoolExecutor
-#     import math
-
-#     print(f"=== Load Test: {pattern} pattern, {max_users} users ===\n")
-
-#     # Setup
-#     config = load_production_config()
-#     workflow_data = register_workflow(
-#         config['servers']['main'],
-#         config['system_ids']['app1'],
-#         config['system_ids']['app2']
-#     )
-
-#     if not workflow_data:
-#         print("✗ Setup failed")
-#         return
-
-#     # Calculate arrival times based on pattern
-#     arrival_times = []
-#     for i in range(max_users):
-#         t = i / max_users
-#         if pattern == "linear":
-#             arrival_times.append(t * duration_sec)
-#         elif pattern == "exponential":
-#             arrival_times.append(duration_sec * (1 - math.exp(-3 * t)))
-#         elif pattern == "step":
-#             step = i // (max_users // 5)
-#             arrival_times.append(step * duration_sec / 5)
-#         elif pattern == "constant":
-#             arrival_times.append(0)
-
-#     # Run concurrent users
-#     metrics = PerformanceMetrics()
-#     start_time = time.time()
-#     results = []
-
-#     def run_user(user_id, arrival_time):
-#         wait = arrival_time - (time.time() - start_time)
-#         if wait > 0:
-#             time.sleep(wait)
-#         try:
-#             return simulate_single_user(config['servers'], config['system_ids'], workflow_data, metrics)
-#         except Exception as e:
-#             print(f"  ✗ {user_id} failed: {type(e).__name__}")
-#             return False
-
-#     with ThreadPoolExecutor(max_workers=max_users) as executor:
-#         futures = [executor.submit(run_user, f"user_{i}", arrival_times[i]) for i in range(max_users)]
-#         for f in futures:
-#             try:
-#                 results.append(f.result())
-#             except Exception as e:
-#                 print(f"  ✗ Future failed: {type(e).__name__}")
-#                 results.append(False)
-
-#     # Summary
-#     total_time = time.time() - start_time
-#     successful = sum(1 for r in results if r)
-#     print(f"\n✓ Completed: {successful}/{max_users} successful in {total_time:.1f}s")
-#     print(f"  Throughput: {max_users/total_time:.2f} users/sec")
-
-#     # Save results to organized directory
-#     import os
-#     import subprocess
-
-#     result_dir = f"load_test_results/{pattern}_{max_users}_users"
-#     os.makedirs(result_dir, exist_ok=True)
-
-#     metrics_file = f"{result_dir}/metrics.json"
-#     metrics.save_to_file(metrics_file)
-#     print(f"\n[RESULTS] Saved to {metrics_file}")
-
-#     # Download server metrics logs
-#     print("\n[METRICS] Downloading server logs...")
-
-#     cmd = f"scp main:~/server/main_metrics.jsonl {result_dir}/"
-#     result = subprocess.run(cmd.split(), capture_output=True, text=True)
-#     if result.returncode == 0:
-#         print("  ✓ Downloaded main server metrics")
-#     else:
-#         print(f"  ⚠ Failed to download main metrics: {result.stderr}")
-
-#     cmd = f"scp replica1:~/replica/replica1_metrics.jsonl {result_dir}/"
-#     result = subprocess.run(cmd.split(), capture_output=True, text=True)
-#     if result.returncode == 0:
-#         print("  ✓ Downloaded replica1 metrics")
-#     else:
-#         print(f"  ⚠ Failed to download replica1 metrics: {result.stderr}")
-
-#     cleanup_simulation_data(
-#         config['servers']['main'],
-#         workflow_data.get('workflow_id'),
-#         [workflow_data.get('func1_id'), workflow_data.get('func2_id')]
-#     )
-
 
 if __name__ == "__main__":
     import sys
